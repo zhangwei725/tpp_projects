@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.get('', function (reslut) {
+                if (reslut.status === 200) {
+                    data = reslut.data
+                    if (data) {
+                        $('#hot_count').text(data.hot_count)
+                    }
+                }
+            })
+
+
+        })
+
+
+    </script>
+</head>
+<body>
+
+<div id="hot">
+    <span id="hot_count"></span>
+
+</div>
+
+
+</body>
+</html>

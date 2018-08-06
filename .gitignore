@@ -108,3 +108,4 @@ venv.bak/
 /requirments/dev.txt
 
 .idea
+/migrations
