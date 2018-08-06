@@ -21,7 +21,6 @@ migrate = Migrate()
 
 
 def init_db(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@47.106.89.6:3306/tpp'
     db.init_app(app)
     migrate.init_app(app, db)
 
