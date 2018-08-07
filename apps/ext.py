@@ -54,7 +54,6 @@ cors = CORS()
 # api/v2/    前端  移动端
 # 老版本
 
-
 def init_cors(app):
     # 针对所有的访问
     # cors.init_app(app, supports_credentials=True)

@@ -17,8 +17,8 @@ banner_fields = {
     'url': fields.String
 }
 
-movie_files = {
-    'name': fields.String,
+movie_fields = {
+    'showname': fields.String,
     'shownameen': fields.String,
     'director': fields.String,
     'leading_role': fields.String,
@@ -27,13 +27,13 @@ movie_files = {
     'language': fields.String,
     'duration': fields.String,
     'screening_model': fields.String,
-    'bg_pic': fields.String,
+    'backgroundpicture': fields.String,
     'openday': fields.DateTime,
 }
 
 data = {
-    'hots': fields.List(fields.Nested(movie_files)),
-    'nows': fields.List(fields.Nested(movie_files)),
+    'hots': fields.List(fields.Nested(movie_fields)),
+    'nows': fields.List(fields.Nested(movie_fields)),
     'hot_count': fields.Integer,
     'now_count': fields.Integer,
 }
