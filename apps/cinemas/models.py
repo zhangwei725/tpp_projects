@@ -4,16 +4,28 @@ from apps.ext import db
 # 影厅
 class Cinemas(db.Model):
     cid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # 影院的名称
     name = db.Column(db.String(100), unique=True, nullable=False, index=True)
+    # 城市
     city = db.Column(db.String(64))
-    area = db.Column(db.String(64))
-    detail = db.Column(db.String(255))
-    bg_pic = db.Column(db.String(100))
-    # True 开发     false 关闭
-    status = db.Column(db.Boolean, default=True)
-    tel = db.Column(db.String(11))
+    # 区域
+    district = db.Column(db.String(64))
+    # 地址
+    address = db.Column(db.String(255))
+    # 联系电话
+    phone = db.Column(db.String(255))
+    # 评分
+    score = db.Column(db.Float(3, 1))
+    # 影厅的数量
+    hallnum = db.Column(db.String(100))
+    # 手续费
+    servicecharge = db.Column(db.String(100))
+    # 限购数量
+    astrict = db.Column(db.String(100))
+    # True 营业    false 休息
+    flag = db.Column(db.Integer, default=1)
     # 是否删除
-    is_active = db.Column(db.Boolean, default=True)
+    isdelete = db.Column(db.Boolean, default=True)
 
 
 # 影厅
