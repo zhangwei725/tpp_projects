@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse, fields, marshal_with
 
-from apps.cinemas.models import Cinemas
+from apps.cinemas.models import Cinemas, Platoon
 
 # 参数传递
 # /list/<int:page>/<int:size>
@@ -14,6 +14,7 @@ from apps.cinemas.models import Cinemas
 
 
 #
+from apps.movies.models import Movies
 
 '''
 1>restful  参数的基本使用
@@ -56,11 +57,41 @@ districts_fields = {
     'cid': fields.Integer,
     'district': fields.String,
 }
+movie_fields = {
+    'mid': fields.Integer,
+    'showname': fields.String,
+    'shownameen': fields.String,
+    'director': fields.String,
+    'leading_role': fields.String,
+    'type': fields.String,
+    'country': fields.String,
+    'language': fields.String,
+    'duration': fields.String,
+    'screening_model': fields.String,
+    'backgroundpicture': fields.String,
+    'openday': fields.DateTime,
+}
+plat_fields = {
+    'pid': fields.Integer,
+    'origin_price': fields.Float,
+    'discount_price': fields.Float,
+    'start_time': fields.DateTime,
+    'end_time': fields.DateTime,
+}
 
 data = {
     'districts': fields.List(fields.Nested(districts_fields)),
-    'cinemas': fields.List(fields.Nested(cinema_fields))
+    'cinemas': fields.List(fields.Nested(cinema_fields)),
+    'cinema': fields.Nested(cinema_fields),
+    'movies': fields.List(fields.Nested(movie_fields)),
+    'plats': fields.List(fields.Nested(plat_fields))
 }
+# 能写代码叫愚公移山   会写代码叫女娲补天    # 10行代码
+# 工作经验   工作年限
+# 准备两个月
+#  唯品会    今日头条   陌陌
+#   15k  20k
+# 第一年  第二年 进上市公司 21k  14 年薪 + 项目奖金    第三年 bat
 
 result = {
     'msg': fields.String(default='success'),
@@ -150,6 +181,44 @@ class CinemasDistrict(Resource):
         districts = Cinemas.query.filter(Cinemas.city == city).group_by(Cinemas.district).all()
         data = {
             'districts': districts,
+        }
+        result = {
+            'data': data
+        }
+        return result
+
+
+# 肤浅
+
+#  程序的优化  表的设计
+#  关心表之间的关联关系
+#  优秀程序员关心数据结构, 差的关心的代码bug
+#  查看影院详情
+
+
+class CinemasDetail(Resource):
+
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('cid', type=int, required=True)
+
+    # 1-2   3-4  5年
+    @marshal_with(result)
+    def get(self):
+        cid = self.parser.parse_args().get('cid')
+        # 获取当前影院所有的排片信息
+        plats = Platoon.query.filter(Platoon.cid == cid).all()
+        # 影院的信息
+        cinema = Cinemas.query.get(cid)
+        # 影片的数据
+        movies = []
+        for plat in plats:
+            movie = Movies.query.get(plat.mid)
+            movies.append(movie)
+        data = {
+            'movies': movies,
+            'plats': plats,
+            'cinema': cinema,
         }
         result = {
             'data': data

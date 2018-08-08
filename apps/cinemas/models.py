@@ -1,7 +1,11 @@
+import datetime
+
 from apps.ext import db
 
-
 # 影厅
+from apps.movies.models import Movies
+
+
 class Cinemas(db.Model):
     cid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 影院的名称
@@ -27,7 +31,9 @@ class Cinemas(db.Model):
     # 是否删除
     isdelete = db.Column(db.Boolean, default=True)
 
+# 下午考试
 
+# flask_login
 # 影厅
 class Halls(db.Model):
     hid = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -38,6 +44,7 @@ class Halls(db.Model):
     status = db.Column(db.Boolean, default=True)
     is_active = db.Column(db.Boolean, default=True)
     cid = db.Column(db.Integer, db.ForeignKey(Cinemas.cid))
+    platoons = db.relationship('Platoon', backref='halls', lazy='dynamic')
 
 
 """
@@ -69,3 +76,23 @@ class Seats(db.Model):
     #     外键设置
     cid = db.Column(db.Integer, db.ForeignKey(Cinemas.cid))
     hid = db.Column(db.Integer, db.ForeignKey(Halls.hid))
+
+
+class Platoon(db.Model):
+    pid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # 原始价格
+    origin_price = db.Column(db.Numeric(7, 2), default=0.00)
+    # 折扣价
+    discount_price = db.Column(db.Numeric(7, 2), default=0.00)
+    # 影片开始时间
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+    # 1 未放映   2 正在放映   3结束放映
+    status = db.Column(db.Integer, default=1)
+    create_date = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_date = db.Column(db.DateTime, default=datetime.datetime.now())
+    is_delete = db.Column(db.Boolean, default=False)
+    # 外键相关
+    mid = db.Column(db.Integer, db.ForeignKey(Movies.mid))
+    hid = db.Column(db.Integer, db.ForeignKey(Halls.hid))
+    cid = db.Column(db.Integer, db.ForeignKey(Cinemas.cid))
